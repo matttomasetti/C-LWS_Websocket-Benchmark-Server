@@ -18,7 +18,7 @@ RUN cd /home \
     && cd libwebsockets \
     && cmake . \
     && make \
-    && make install \
+    && make install
 
 #compile json-c
 RUN cd .. \
@@ -28,7 +28,7 @@ RUN cd .. \
     && cmake ../json-c \
     && make \
     && make test \
-    && make install \
+    && make install
 
 #compile websocket
 RUN cd ../websocket \
