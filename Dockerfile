@@ -21,7 +21,7 @@ RUN cd /home \
     && make install
 
 #compile json-c
-RUN cd .. \
+RUN cd /home \
     && git clone https://github.com/json-c/json-c.git \
     && mkdir json-c-build \
     && cd json-c-build \
@@ -31,7 +31,7 @@ RUN cd .. \
     && make install
 
 #compile websocket
-RUN cd ../websocket \
+RUN cd /home/websocket \
     && cmake configure . \
     && cmake . \
     && make
