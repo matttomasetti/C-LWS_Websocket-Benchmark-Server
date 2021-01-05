@@ -32,7 +32,7 @@ RUN cd .. \
 
 #compile websocket
 RUN cd ../websocket \
-    #&& cmake configure . \
+    && cmake configure . \
     && cmake . \
     && make
 
