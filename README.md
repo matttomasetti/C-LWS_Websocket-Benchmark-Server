@@ -25,6 +25,7 @@ docker run -p 8080:8080 websocket_benchmark/c
 #### Requirements
 
 In order for this websocket server to compile and run, it requires:
+* CMake
 * Libwebsockets
 * json-c
 
