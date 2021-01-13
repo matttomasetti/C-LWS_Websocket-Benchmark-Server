@@ -112,6 +112,8 @@ int server_receive(){
     //grab the "c" property from the incoming JSON message
     json_object_object_get_ex(parsed_json, "c", &count);
 
+    lws_callback_on_writable(wsi);
+
     //send client the timestamp
     notify(json_object_get_int(count));
 
