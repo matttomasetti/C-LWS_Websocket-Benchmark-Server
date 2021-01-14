@@ -18,6 +18,8 @@ void *in;
 size_t len;
 char buf[LWS_PRE + 64];                           // buffer of any size plus the LWS_PRE
 char buffer[64];
+struct json_object *parsed_json;
+struct json_object *event;
 
 
 struct per_session_data__websocket_server *pss;

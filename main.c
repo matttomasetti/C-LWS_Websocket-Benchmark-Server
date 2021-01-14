@@ -44,6 +44,7 @@ int main(int argc, const char **argv)
     }
 
 
+    int count = 0;
     while (n >= 0 && !interrupted)
         // Accept new connections to our context's server and
         // call the receive callback for incoming frame data received by
@@ -95,7 +96,7 @@ void setServerOptions(int argc, const char **argv) {
     info.protocols = protocols;         //struct containing the defined callback function
     info.pvo = &pvo;                    //linked-list of per-vhost settings
     if (!lws_cmdline_option(argc, argv, "-n"))
-        info.extensions = extensions;   //tells the server to send a Sec-WebSocket-Extensions header with
+        //info.extensions = extensions;   //tells the server to send a Sec-WebSocket-Extensions header with
                                         // per-message deflate
     info.pt_serv_buf_size = 32 * 1024;  //max size of a chunk that can be sent at once
     info.options = LWS_SERVER_OPTION_VALIDATE_UTF8 |

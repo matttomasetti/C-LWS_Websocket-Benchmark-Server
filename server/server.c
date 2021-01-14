@@ -16,6 +16,8 @@
 static int callback_websocket_server(struct lws *a_wsi, enum lws_callback_reasons a_reason,
                              void *a_user, void *a_in, size_t a_len) {
 
+    int return_value;
+
     wsi = a_wsi;
     reason = a_reason;
     user = a_user;
@@ -26,27 +28,33 @@ static int callback_websocket_server(struct lws *a_wsi, enum lws_callback_reason
     vhd = (struct vhd_websocket_server *) lws_protocol_vh_priv_get(lws_get_vhost(wsi),
                                      lws_get_protocol(wsi));
 
+
     switch (reason) {
 
         //One-time call per protocol
         case LWS_CALLBACK_PROTOCOL_INIT:
-            return server_initiate();
+            return_value = server_initiate();
+            break;
 
         //after the server completes a handshake with an incoming client
         case LWS_CALLBACK_ESTABLISHED:
-            return connection_established();
-
+            return_value = connection_established();
+            break;
         //data has appeared for this server endpoint from a remote client, it can be found at *in and is len bytes long
         case LWS_CALLBACK_RECEIVE:
-            return server_receive();
+            return_value = server_receive();
+            break;
 
         //when the websocket session ends
         case LWS_CALLBACK_CLOSED:
-            return connection_closed();
+            return_value = connection_closed();
+            break;
 
         //return for all other event
         default:
-            return 0;
+            return_value = 0;
     }
+
+    return return_value;
 
 }

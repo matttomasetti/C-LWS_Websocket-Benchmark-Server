@@ -45,9 +45,17 @@ int server_initiate(){
 int connection_established(){
 
     lwsl_warn("LWS_CALLBACK_ESTABLISHED\n");
+    pss->ring = lws_ring_create(sizeof(struct msg), RING_DEPTH,
+                                websocket_server_destroy_message);
 
     //send client the initial timestamp
-    return notify(0);
+    notify(0);
+
+    if (!pss->ring)
+        return 1;
+    pss->tail = 0;
+
+    return 0;
 }
 
 
@@ -104,18 +112,16 @@ int server_receive(){
         return 0;
     }
 
-    struct json_object *parsed_json;
-    struct json_object *count;
-
     //parse json from the incoming message
     parsed_json = json_tokener_parse((amsg.payload) + LWS_PRE);
     //grab the "c" property from the incoming JSON message
-    json_object_object_get_ex(parsed_json, "c", &count);
+    int count = json_object_get_int(json_object_object_get(parsed_json, "c"));
+    json_object_put(parsed_json);
 
     lws_callback_on_writable(wsi);
 
     //send client the timestamp
-    notify(json_object_get_int(count));
+    notify(count);
 
     if (n < 3 && !pss->flow_controlled) {
         pss->flow_controlled = 1;
@@ -172,7 +178,6 @@ int getTimestamp(){
 const char *getEvent(int c){
 
     //create a new json object containing a and the current timestamp
-    struct json_object *event;
     event = json_object_new_object();
     json_object_object_add(event, "c", json_object_new_int(c));
     json_object_object_add(event, "ts", json_object_new_int(getTimestamp()));
@@ -196,6 +201,7 @@ int notify(int c){
     }
 
     snprintf(buffer, sizeof(buffer), getEvent(c));
+    json_object_put(event);
 
     // use their stncpy to null-terminate
     // 1 is add to the strlen of the buffer as 1 character always seemed
@@ -210,12 +216,16 @@ int notify(int c){
         return -1;
     }
 
-    //creates the ringbuffer and allocates the storage.
-    //Returns the new lws_ring *, or NULL if the allocation failed.
-    pss->ring = lws_ring_create(sizeof(struct msg), RING_DEPTH, websocket_server_destroy_message);
-    if (!pss->ring)
-        return 1;
-    pss->tail = 0;
+    /*
+     * Had to comment this code out as it would consume MASSIVE amounts of RAM.
+     * Websocket seems to run fine without it
+     */
+//    //creates the ringbuffer and allocates the storage.
+//    //Returns the new lws_ring *, or NULL if the allocation failed.
+//    pss->ring = lws_ring_create(sizeof(struct msg), RING_DEPTH, websocket_server_destroy_message);
+//    if (!pss->ring)
+//        return 1;
+//    pss->tail = 0;
 
     /*
      * Workaround deferred deflate in pmd extension by only
