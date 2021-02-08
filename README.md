@@ -1,7 +1,8 @@
 # C LWS Websocket Benchmark Server
 
-<b> If interested in the results, read the [Full Report](https://www.researchgate.net/publication/348993267_An_Analysis_of_the_Performance_of_Websockets_in_Various_Programming_Languages_and_Libraries) of the shortened 
-[Blog Post](https://matttomasetti.medium.com/websocket-performance-comparison-10dc89367055) about this experiment.</b>
+<b> If interested in the results, read the [Full Report](https://www.researchgate.net/publication/348993267_An_Analysis_of_the_Performance_of_Websockets_in_Various_Programming_Languages_and_Libraries) 
+or the shortened [Blog Post](https://matttomasetti.medium.com/websocket-performance-comparison-10dc89367055) 
+about this experiment.</b>
 
 This is a C (LibWebsockets) variation of websocket servers designed to 
 benchmark the performance of both reliability and speed of various 
